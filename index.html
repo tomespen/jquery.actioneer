@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>jquery.efi.actioneer</title>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+	<script type="text/javascript" src="jquery-ui.custom.js"></script>
+	<script type="text/javascript" src="jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="jquery.hotkeys.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<script type="text/javascript" src="widget.jquery.actioneer.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery.actioneer.css">
+</head>
+<body>
+<div id="keypress"></div>
+
+<p>
+Listen over funksjoner er bare ment som et eksempel og må bestemmes av Efi.<br />
+Mulige funksjoner pr. produkt vil også variere avhengig av statusen til produktet,<br />
+eks. et produkt som allerede er satt til passiv vil ikke få opp &quot;sett passiv&quot; valget i listen.
+</p>
+
+<script type="text/javascript">
+$(document).ready( function() {
+	$('body').actioneer(
+		{
+			keyTrigger: 'shift+space',
+			jsonActions: 'document.json'
+		},
+
+		/*  \ at end of line to give better readability, not supported in all browsers!! */
+
+		{
+			init: function (event,data) {
+				console.log(event);
+				console.log(data);
+			}
+		}
+	);
+});
+</script>
+</body>
+</html>

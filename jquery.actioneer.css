@@ -1,0 +1,76 @@
+﻿#jquery-actioneer {
+	position: relative;
+	display: none;
+	position: fixed;
+	top: 5%;
+	left: 30%;
+
+	width: 40%;
+
+	background-color: rgba(255, 255, 255, 0.75);
+	border: 10px solid rgba(0, 0, 0, 0.25);
+	border-radius: 4px;
+	z-index: 5000;
+}
+
+#jquery-actioneer-inner {
+	position: relative;
+	display: block;
+	height: 2em;
+	line-height: 2em;
+	text-align: center;
+	font-size: 140%;
+	background-color: #e6e6e6;
+	margin: 10px;
+}
+
+#jquery-actioneer-inner span {
+	float: left;
+	font-size: 140%;
+	height: 100%;
+	display: inline-block;
+	margin: 0 10px;
+}
+
+#jquery-actioneer-search {
+	position: relative;
+	outline: none;
+	font-size: 140%;
+	float:left;
+	border: none;
+	background-color: #e6e6e6;
+	height: 100%;
+	display: block;
+	margin: 0 10px;
+	padding: 0;
+}
+
+#jquery-actioneer-autocomplete {
+	display: none;
+	position: absolute;
+	top: 2em;
+	left: 0;
+
+	width: 100%;
+	height: auto;
+	border-width: 0 1px 1px;
+
+	background-color: #e6e6e6;
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+
+	padding: 10px 0 0;
+	margin: 0;
+	text-align: left;
+	list-style: none;
+	font-size: 80%;
+	line-height: 170%;
+}
+
+#jquery-actioneer-autocomplete li {
+	padding: 0 10px;
+}
+
+#jquery-actioneer-autocomplete li.selected {
+	background-color: #00acdc;
+	color: #fff;
+}
