@@ -28,10 +28,22 @@ $.widget('efi.actioneer', {
 		base = this;
 
 		// create pop-up launcher html element and append to the <body>
-		base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
+		base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><button id="jquery-actioneer-go">&#x23CE;</button><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
 
 
-		// key bindings
+/*******************************************
+*     Mouse bindings                       *
+*******************************************/
+
+
+		$("#jquery-actioneer-go").click(function () {
+			base.selectaction();
+		})
+
+
+/*******************************************
+*     Keyboard bindings                    *
+*******************************************/
 		$(document).on('keypress', null, base.options.keyTrigger, function() {
 			$("#jquery-actioneer-inner").children('span').remove();
 			$('#jquery-actioneer').show();
@@ -39,6 +51,7 @@ $.widget('efi.actioneer', {
 			$('#jquery-actioneer-search').focus();
 			base.searchactions();
 		});
+
 
 		$("#jquery-actioneer-search").on('keydown', null, "esc", function() {
 			// hide launcher
@@ -109,7 +122,6 @@ $.widget('efi.actioneer', {
 		} else {
 
 			// build actions from json blob..
-			console.log("build from json!");
 			base.buildactionslistjson();
 
 		}
@@ -122,6 +134,13 @@ $.widget('efi.actioneer', {
 /**************************************************************
 *     PLUGIN SPESIFIC FUNCTIONS                               *
 **************************************************************/
+
+
+/*******************************************
+*     Build / Search functions             *
+*******************************************/
+
+
 	buildactionslist: function () {
 		var actions = [];
 
@@ -144,6 +163,7 @@ $.widget('efi.actioneer', {
 		// trigger event
 		base._trigger('buildComplete', null, 'Action build completed.');
 	}, // end buildactionslist()
+
 
 
 	buildactionslistjson: function () {
@@ -179,6 +199,8 @@ $.widget('efi.actioneer', {
 
 		base.options.actions = actions;
 	},
+
+
 
 	buildactionslistjsonfile: function () {
 		$.getJSON( base.options.jsonActions, function( jsonobj ) {
@@ -232,8 +254,10 @@ $.widget('efi.actioneer', {
 
 
 		if (base.options.currentAction == '') {
+
+			// regexp search on action name
 			for (var i = 0, len = base.options.actions.length; i < len; i++) {
-				// set node for easier access
+				// set node for easy access
 				searchname = base.options.actions[i].name;
 
 				// build regexp
@@ -251,9 +275,10 @@ $.widget('efi.actioneer', {
 				base.options.searchResults = results;
 			}
 		} else {
-			base.debug("Subactions: " + base.options.currentAction.subactions.length);
 
+			// regexp search on subaction name
 			for (var i = 0, len = base.options.currentAction.subactions.length; i < len; i++) {
+				// set node for easy access
 				searchname = base.options.currentAction.subactions[i].name;
 
 				// build regexp
@@ -271,7 +296,7 @@ $.widget('efi.actioneer', {
 				base.options.searchResults = results;
 
 			}
-		}
+		} // end if check on action / subaction
 
 		$("#jquery-actioneer-autocomplete").text('');
 		if (results.length) {
@@ -285,9 +310,14 @@ $.widget('efi.actioneer', {
 			} // end results for loop
 		} // end if results.length
 
+		base.bindmouseactions();
+
 	}, // end searchactions()
 
 
+/*******************************************
+*     Navigating / Keyboard                *
+*******************************************/
 
 
 	actionsmove: function (direction) {
@@ -352,12 +382,48 @@ $.widget('efi.actioneer', {
 		} else {
 			currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
 			$("#jquery-actioneer-search").before('<span> - &nbsp;&nbsp;' + currentElement + '</span>');
-
 			$("#jquery-actioneer-search").before('<span>...kjører!</span>');
 
 			$("#jquery-actioneer-autocomplete, #jquery-actioneer-search").hide();
-			console.log("Do action!");
+			base.debug("Do action: " + base.options.currentAction.subactions[currentIndex].action);
+			location.href = base.options.currentAction.subactions[currentIndex].action;
+
+			base.resetstate();
+
 		}
+	},
+
+
+/*******************************************
+*     Mouse bindings                       *
+*******************************************/
+
+	bindmouseactions: function() {
+
+		$("#jquery-actioneer-autocomplete li").on('mouseenter', function() {
+			$("#jquery-actioneer-autocomplete li.selected").removeClass("selected");
+			$(this).addClass("selected");
+		});
+
+		$("#jquery-actioneer-autocomplete li").on('click', function() {
+			base.selectaction();
+		});
+
+	},
+
+
+/*******************************************
+*     Execute / Reset functions            *
+*******************************************/
+
+	resetstate: function () {
+		setTimeout(function() {
+				$('#jquery-actioneer').hide();
+				$('#jquery-actioneer-search').show();
+				$("#jquery-actioneer-search").val('');
+
+				base.options.currentAction = "";
+			}, 5000);
 	},
 
 	/*

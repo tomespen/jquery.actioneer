@@ -45,6 +45,16 @@
 	padding: 0;
 }
 
+#jquery-actioneer-inner button {
+	float: right;
+	border: none;
+	background-color: #e6e6e6;
+	font-size: 130%;
+	margin: 0 10px 0 0;
+	padding: 0;
+	outline: none;
+}
+
 #jquery-actioneer-autocomplete {
 	display: none;
 	position: absolute;
