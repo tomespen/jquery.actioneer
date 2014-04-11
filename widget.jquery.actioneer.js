@@ -72,15 +72,18 @@ $.widget('efi.actioneer', {
 			}
 
 			// update results whenver key is released, except for [up], [down] or [enter]
-			if (event.which != 38 && event.which != 40 && event.which != 13) {
+			if (event.which != 38 && event.which != 40 && event.which != 13 && event.which != 48 && event.which != 49 && event.which != 50 && event.which != 51 && event.which != 52 && event.which != 53 && event.which != 54 && event.which != 55 && event.which != 56 && event.which != 57) {
 				base.searchactions();
 			}
 		});
 
 		$("#jquery-actioneer-search").on('keydown', function(event) {
 			if (event.which == 13) {
+				// enter => select current action
 				base.selectaction();
+
 			} else if (event.which == 8) {
+				// backspace => remove previous action if searchfield is empty
 				var searchtext = $("#jquery-actioneer-search").val();
 
 				if (searchtext == "") {
@@ -91,7 +94,7 @@ $.widget('efi.actioneer', {
 			} // if event.which == ??
 		});
 
-		$("#jquery-actioneer-search").on('keydown', null, "up", function() {
+				$("#jquery-actioneer-search").on('keydown', null, "up", function() {
 			// move selector up
 			base.actionsmove('up');
 		});
@@ -99,6 +102,79 @@ $.widget('efi.actioneer', {
 			// move selector down
 			base.actionsmove('down');
 		});
+
+
+		$("#jquery-actioneer-search").on('keyup', function(event) {
+			var jasval = $("#jquery-actioneer-search").val();
+			base.debug(jasval);
+
+			switch (jasval) {
+			case "1":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(0)).addClass('selected');
+				base.selectaction();
+				break;
+			case "2":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(1)).addClass('selected');
+				base.selectaction();
+				break;
+			case "3":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(2)).addClass('selected');
+				base.selectaction();
+				break;
+			case "4":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(3)).addClass('selected');
+				base.selectaction();
+				break;
+			case "5":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(4)).addClass('selected');
+				base.selectaction();
+				break;
+			case "6":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(5)).addClass('selected');
+				base.selectaction();
+				break;
+			case "7":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(6)).addClass('selected');
+				base.selectaction();
+				break;
+			case "8":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(7)).addClass('selected');
+				base.selectaction();
+				break;
+			case "9":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(8)).addClass('selected');
+				base.selectaction();
+				break;
+			case "0":
+				$("#jquery-actioneer-search").val('');
+				$("#jquery-actioneer-autocomplete li").removeClass('selected');
+				$("#jquery-actioneer-autocomplete li").eq(parseInt(9)).addClass('selected');
+				base.selectaction();
+				break;
+			default:
+				base.searchactions();
+				break;
+			}
+		});
+
 
 		// trigger callback event
 		base._trigger('created', null, 'Plugin created ...');
@@ -261,7 +337,12 @@ $.widget('efi.actioneer', {
 				searchname = base.options.actions[i].name;
 
 				// build regexp
-				rx = '/.*'+stxt+'.*/gi';
+				rx = '/.*';
+				for (var t = 0, tlen = stxt.length; t < tlen; t++) {
+					rx += stxt.charAt(t) + '.*';
+				}
+				rx += '/gi'
+
 
 				// match regexp
 				res = searchname.match(eval(rx));
@@ -282,7 +363,11 @@ $.widget('efi.actioneer', {
 				searchname = base.options.currentAction.subactions[i].name;
 
 				// build regexp
-				rx = '/.*'+stxt+'.*/gi';
+				rx = '/.*';
+				for (var t = 0, tlen = stxt.length; t < tlen; t++) {
+					rx += stxt.charAt(t) + '.*';
+				}
+				rx += '/gi'
 
 				// match regexp
 				res = searchname.match(eval(rx));
@@ -368,28 +453,38 @@ $.widget('efi.actioneer', {
 			};
 		});
 
-		if (base.options.currentAction == '') {
-			// set current action to currently selected element.
-			base.options.currentAction = base.options.searchResults[currentIndex];
+		// if something is written, but no action is selected, set first element as selected
+		if ($("#jquery-actioneer-search").val() !== '' && currentIndex == -1 && base.options.searchResults.length >= 0) {
+			currentIndex = 0;
+			$("#jquery-actioneer-autocomplete li").eq(parseInt(currentIndex)).addClass('selected');
+		}
 
-			// find name for currently selected element and add it before the search field.
-			currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
-			$("#jquery-actioneer-search").before('<span>' + currentElement + '</span>');
-			$("#jquery-actioneer-search").val('');
+		// Check that something is selected
+		if ($("#jquery-actioneer-search").val() !== '' || currentIndex != -1) {
 
-			// invoke search of sub items
-			base.searchactions();
-		} else {
-			currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
-			$("#jquery-actioneer-search").before('<span> - &nbsp;&nbsp;' + currentElement + '</span>');
-			$("#jquery-actioneer-search").before('<span>...kjører!</span>');
+			if (base.options.currentAction == '') {
+				// set current action to currently selected element.
+				base.options.currentAction = base.options.searchResults[currentIndex];
 
-			$("#jquery-actioneer-autocomplete, #jquery-actioneer-search").hide();
-			base.debug("Do action: " + base.options.currentAction.subactions[currentIndex].action);
-			location.href = base.options.currentAction.subactions[currentIndex].action;
+				// find name for currently selected element and add it before the search field.
+				currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
+				$("#jquery-actioneer-search").before('<span>' + currentElement + '</span>');
+				$("#jquery-actioneer-search").val('');
 
-			base.resetstate();
+				// invoke search of sub items
+				base.searchactions();
+			} else {
+				currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
+				$("#jquery-actioneer-search").before('<span> - &nbsp;&nbsp;' + currentElement + '</span>');
+				$("#jquery-actioneer-search").before('<span>...kjører!</span>');
 
+				$("#jquery-actioneer-autocomplete, #jquery-actioneer-search").hide();
+				base.debug("Do action: " + base.options.currentAction.subactions[currentIndex].action);
+				location.href = base.options.currentAction.subactions[currentIndex].action;
+
+				base.resetstate();
+
+			}
 		}
 	},
 
