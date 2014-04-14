@@ -71,11 +71,12 @@ $.widget('efi.actioneer', {
 				$("#jquery-actioneer-search").val('');
 			}
 
-			// update results whenver key is released, except for [up], [down] or [enter]
-			if (event.which != 38 && event.which != 40 && event.which != 13 && event.which != 48 && event.which != 49 && event.which != 50 && event.which != 51 && event.which != 52 && event.which != 53 && event.which != 54 && event.which != 55 && event.which != 56 && event.which != 57) {
+			// update results whenver key is released, except for [arrow-keys] or [enter]
+			if (event.which != 38 && event.which != 40 && event.which != 13 && event.which != 37 && event.which != 39) {
 				base.searchactions();
 			}
 		});
+
 
 		$("#jquery-actioneer-search").on('keydown', function(event) {
 			if (event.which == 13) {
@@ -103,82 +104,9 @@ $.widget('efi.actioneer', {
 			base.actionsmove('down');
 		});
 
-
-		$("#jquery-actioneer-search").on('keyup', function(event) {
-			var jasval = $("#jquery-actioneer-search").val();
-			base.debug(jasval);
-
-			switch (jasval) {
-			case "1":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(0)).addClass('selected');
-				base.selectaction();
-				break;
-			case "2":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(1)).addClass('selected');
-				base.selectaction();
-				break;
-			case "3":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(2)).addClass('selected');
-				base.selectaction();
-				break;
-			case "4":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(3)).addClass('selected');
-				base.selectaction();
-				break;
-			case "5":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(4)).addClass('selected');
-				base.selectaction();
-				break;
-			case "6":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(5)).addClass('selected');
-				base.selectaction();
-				break;
-			case "7":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(6)).addClass('selected');
-				base.selectaction();
-				break;
-			case "8":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(7)).addClass('selected');
-				base.selectaction();
-				break;
-			case "9":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(8)).addClass('selected');
-				base.selectaction();
-				break;
-			case "0":
-				$("#jquery-actioneer-search").val('');
-				$("#jquery-actioneer-autocomplete li").removeClass('selected');
-				$("#jquery-actioneer-autocomplete li").eq(parseInt(9)).addClass('selected');
-				base.selectaction();
-				break;
-			default:
-				base.searchactions();
-				break;
-			}
-		});
-
-
 		// trigger callback event
 		base._trigger('created', null, 'Plugin created ...');
-	},
+	}, // End create()
 
 
 
@@ -203,7 +131,7 @@ $.widget('efi.actioneer', {
 		}
 
 		base._trigger('init', null, 'Plugin initiated');
-	},
+	}, // end init()
 
 
 
@@ -274,7 +202,7 @@ $.widget('efi.actioneer', {
 		} // for loop
 
 		base.options.actions = actions;
-	},
+	}, // end buildactionslistjson()
 
 
 
@@ -315,7 +243,7 @@ $.widget('efi.actioneer', {
 
 		// trigger event
 		base._trigger('buildComplete', null, 'Action build completed.');
-	}, // end buildactionslistjson
+	}, // end buildactionslistjsonfile()
 
 
 
@@ -439,8 +367,6 @@ $.widget('efi.actioneer', {
 				$("#jquery-actioneer-autocomplete li").removeClass('selected');
 				$("#jquery-actioneer-autocomplete li").eq(parseInt(currentIndex)).addClass('selected');
 			}
-			//base.debug(direction + ' - ' + parseInt(currentIndex));
-
 		} // end if
 	}, // end actionsmove()
 
@@ -462,7 +388,12 @@ $.widget('efi.actioneer', {
 		// Check that something is selected
 		if ($("#jquery-actioneer-search").val() !== '' || currentIndex != -1) {
 
-			if (base.options.currentAction == '') {
+			if (base.options.currentAction == '' && base.options.searchResults[currentIndex].subactions == undefined) {
+
+				base.execaction(currentIndex);
+
+			} else if (base.options.currentAction == '') {
+
 				// set current action to currently selected element.
 				base.options.currentAction = base.options.searchResults[currentIndex];
 
@@ -473,20 +404,12 @@ $.widget('efi.actioneer', {
 
 				// invoke search of sub items
 				base.searchactions();
+
 			} else {
-				currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
-				$("#jquery-actioneer-search").before('<span> - &nbsp;&nbsp;' + currentElement + '</span>');
-				$("#jquery-actioneer-search").before('<span>...kjører!</span>');
-
-				$("#jquery-actioneer-autocomplete, #jquery-actioneer-search").hide();
-				base.debug("Do action: " + base.options.currentAction.subactions[currentIndex].action);
-				location.href = base.options.currentAction.subactions[currentIndex].action;
-
-				base.resetstate();
-
+				base.execaction(currentIndex);
 			}
 		}
-	},
+	}, // end selectaction()
 
 
 /*******************************************
@@ -504,7 +427,7 @@ $.widget('efi.actioneer', {
 			base.selectaction();
 		});
 
-	},
+	}, // end bindmouseactions()
 
 
 /*******************************************
@@ -512,6 +435,7 @@ $.widget('efi.actioneer', {
 *******************************************/
 
 	resetstate: function () {
+
 		setTimeout(function() {
 				$('#jquery-actioneer').hide();
 				$('#jquery-actioneer-search').show();
@@ -519,17 +443,27 @@ $.widget('efi.actioneer', {
 
 				base.options.currentAction = "";
 			}, 5000);
-	},
+	}, // end resetstate()
 
-	/*
-	subactions: function () {
-		If selected action-element has sub actions this lists / binds these in #...-search.
-	}
+	execaction: function (currentIndex) {
 
-	execaction: function () {
-		executes action
+			if (base.options.currentAction != '') { $("#jquery-actioneer-search").before('<span> - </span>'); }
+
+			currentElement = $("#jquery-actioneer-autocomplete li.selected").text();
+			$("#jquery-actioneer-search").before('<span>' + currentElement + '</span>');
+
+
+		if (typeof currentIndex == 'number') {
+
+			$("#jquery-actioneer-autocomplete, #jquery-actioneer-search").hide();
+			$("#jquery-actioneer-search").before('<span>...kjører!</span>');
+
+			location.href = base.options.searchResults[currentIndex].action;
+
+		}
+
+		base.resetstate();
 	},
-	*/
 
 /**************************************************************
 *     DEBUG & TESTING                                         *
