@@ -28,7 +28,8 @@ $.widget('efi.actioneer', {
 		base = this;
 
 		// create pop-up launcher html element and append to the <body>
-		base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><button id="jquery-actioneer-go">&#x23CE;</button><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
+		// base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><button id="jquery-actioneer-go">&#x23CE;</button><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
+		base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
 
 
 /*******************************************
@@ -55,11 +56,13 @@ $.widget('efi.actioneer', {
 
 		$("#jquery-actioneer-search").on('keydown', null, "esc", function() {
 			// hide launcher
+			base.resetstate();
 			$('#jquery-actioneer').toggle();
 			$("#jquery-actioneer-autocomplete").hide();
 		});
 		$("#jquery-actioneer-search").on('keypress', null, base.options.keyTrigger, function() {
 			// hide launcher
+			base.resetstate();
 			$('#jquery-actioneer').toggle();
 			$("#jquery-actioneer-autocomplete").hide();
 		});
@@ -436,14 +439,16 @@ $.widget('efi.actioneer', {
 
 	resetstate: function () {
 
-		setTimeout(function() {
-				$('#jquery-actioneer').hide();
-				$('#jquery-actioneer-search').show();
-				$("#jquery-actioneer-search").val('');
+		$('#jquery-actioneer').hide();
+		$('#jquery-actioneer-search').show();
+		$("#jquery-actioneer-search").val('');
 
-				base.options.currentAction = "";
-			}, 5000);
+		base.options.currentAction = "";
+
 	}, // end resetstate()
+
+
+
 
 	execaction: function (currentIndex) {
 
