@@ -27,7 +27,7 @@ eks. et produkt som allerede er satt til passiv vil ikke få opp &quot;sett pass
 $(document).ready( function() {
 	$('body').actioneer(
 		{
-			keyTrigger: 'shift+space',
+			keyTrigger: 'shift+space', // shift+space does not work in Firefox!
 			jsonActions: 'document.json'
 		},
 

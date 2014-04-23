@@ -26,6 +26,7 @@ $.widget('efi.actioneer', {
 
 		// store THIS in variable base to avoid collision with other functions refering to base.
 		base = this;
+		var keys = '';
 
 		// create pop-up launcher html element and append to the <body>
 		// base._container = $('<div id="jquery-actioneer"><div id="jquery-actioneer-inner"><input type="text" id="jquery-actioneer-search" /><button id="jquery-actioneer-go">&#x23CE;</button><ul id="jquery-actioneer-autocomplete"></ul></div></div>').appendTo('body');
@@ -45,7 +46,7 @@ $.widget('efi.actioneer', {
 /*******************************************
 *     Keyboard bindings                    *
 *******************************************/
-		$(document).on('keypress', null, base.options.keyTrigger, function() {
+		$('body').on('keypress', null, base.options.keyTrigger, function() {
 			$("#jquery-actioneer-inner").children('span').remove();
 			$('#jquery-actioneer').show();
 			$("#jquery-actioneer-search").val('');
@@ -53,17 +54,37 @@ $.widget('efi.actioneer', {
 			base.searchactions();
 		});
 
+		if (window.navigator.appName == 'Netscape') {
+			$('body').on('keydown', function(event) {
+				keys += event.which;
+				if (keys.length > 4) {
+					keys = keys.substr(-4);
+				}
+
+				if (keys == '1632') {
+					$("#jquery-actioneer-inner").children('span').remove();
+					$('#jquery-actioneer').show();
+					$("#jquery-actioneer-search").val('');
+					$('#jquery-actioneer-search').focus();
+					base.searchactions();
+
+					keys = '';
+				}
+			})
+		}
+
 
 		$("#jquery-actioneer-search").on('keydown', null, "esc", function() {
 			// hide launcher
 			base.resetstate();
-			$('#jquery-actioneer').toggle();
+			$('#jquery-actioneer').hide();
 			$("#jquery-actioneer-autocomplete").hide();
 		});
+
 		$("#jquery-actioneer-search").on('keypress', null, base.options.keyTrigger, function() {
 			// hide launcher
 			base.resetstate();
-			$('#jquery-actioneer').toggle();
+			$('#jquery-actioneer').hide();
 			$("#jquery-actioneer-autocomplete").hide();
 		});
 
@@ -96,7 +117,7 @@ $.widget('efi.actioneer', {
 				} // if searchtext == ""
 
 			} // if event.which == ??
-		});
+		}); // END on keydown
 
 				$("#jquery-actioneer-search").on('keydown', null, "up", function() {
 			// move selector up
