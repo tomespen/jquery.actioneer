@@ -54,7 +54,8 @@ $.widget('efi.actioneer', {
 			base.searchactions();
 		});
 
-		if (window.navigator.appName == 'Netscape') {
+
+		if (window.navigator.userAgent.indexOf("Firefox") >= 0) {
 			$('body').on('keydown', function(event) {
 				keys += event.which;
 				if (keys.length > 4) {
@@ -71,7 +72,7 @@ $.widget('efi.actioneer', {
 					keys = '';
 				}
 			})
-		}
+		} // END hardcoded binding for FireFox
 
 
 		$("#jquery-actioneer-search").on('keydown', null, "esc", function() {
