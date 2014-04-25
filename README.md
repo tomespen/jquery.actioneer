@@ -6,6 +6,21 @@ Big thank you to [Efi](http://www.efi.no) which allowed me to Open Source the co
 
 Homepage and live example soon...
 
+##Configuration
+Is done through JSON, see the included document.json for an example.
+The "jsonActions" option takes a JSON blob, reference to a .json file or it can be left blank.
+If it is left blank the plugin will look for links with the class "actioneer" and build it's actions list from these.
+
+`$('body').actioneer(
+		{
+			keyTrigger: 'shift+space',
+			jsonActions: 'document.json'
+		}
+	);`
+
+Currently there are callbacks for pluginCreation (created), init (init) and Action building complete (buildComplete).
+More will be added.
+
 
 ###Todo
 * Improve code quality
