@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Jquery.actioneer : Simple action launcer jQuery plugin" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Jquery.actioneer</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tomespen/jquery.actioneer">View on GitHub</a>
+
+          <h1 id="project_title">Jquery.actioneer</h1>
+          <h2 id="project_tagline">Simple action launcer jQuery plugin</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tomespen/jquery.actioneer/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tomespen/jquery.actioneer/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="jqueryactioneer" class="anchor" href="#jqueryactioneer"><span class="octicon octicon-link"></span></a>jquery.actioneer</h1>
+
+<p>Simple action launcer made for Efi's customerservice intranet.
+The launcher was inspired by <a href="http://www.launchy.net/">Launcy</a> and <a href="http://www.alfredapp.com/">Alfred</a> and bears resemblance to these applications.</p>
+
+<p>Big thank you to <a href="http://www.efi.no">Efi</a> which allowed me to Open Source the code, which was developed on their time.</p>
+
+<p>Homepage and live example coming soon...</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Is done through JSON, see the included document.json for an example.
+The "jsonActions" option takes a JSON blob, reference to a .json file or it can be left blank.
+If it is left blank the plugin will look for links with the class "actioneer" and build it's actions list from these.</p>
+
+<pre><code>$('body').actioneer(
+    {
+        keyTrigger: 'shift+space',
+        jsonActions: 'document.json'
+    }
+);
+</code></pre>
+
+<p>Currently there are callbacks for pluginCreation (created), init (init) and Action building complete (buildComplete).
+More will be added.</p>
+
+<h3>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>Todo</h3>
+
+<ul>
+<li>Improve code quality</li>
+<li>Versatility, improve configuration options</li>
+<li>"Feeling" when interacting with the search box</li>
+<li>more to come..</li>
+</ul><h3>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h3>
+
+<ul>
+<li><a href="http://jquery.com/">jQuery 2.x+</a></li>
+<li><a href="http://jqueryui.com/">jQuery UI 1.9.x+</a></li>
+<li><a href="http://jqueryui.com/">jQuery UI widget factory</a></li>
+<li><a href="https://github.com/jeresig/jquery.hotkeys">jQuery hotkeys</a></li>
+</ul><h3>
+<a name="browser-compatability" class="anchor" href="#browser-compatability"><span class="octicon octicon-link"></span></a>Browser compatability</h3>
+
+<ul>
+<li>IE 7 and greater</li>
+<li>FireFox, tested on version 25</li>
+<li>Chrome, tested on version 30+</li>
+<li>Safari, tested on 7</li>
+<li>Should work everywhere jQuery 2.x works</li>
+</ul><h4>
+<a name="licence---mit" class="anchor" href="#licence---mit"><span class="octicon octicon-link"></span></a>Licence - MIT</h4>
+
+<pre><code>Copyright (c) 2014 Tom Espen Pedersen / tom.espen.pedersen@gmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Jquery.actioneer maintained by <a href="https://github.com/tomespen">tomespen</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
